@@ -4,7 +4,7 @@ https://github.com/randomknowme/cn2
 
 https://github.com/randomknowme/cn3
 
-# unit 1
+# unit 3
 # Comparison of HTTP, SMTP, POP3, and IMAP
 
 ## 2. Definition and Purpose
