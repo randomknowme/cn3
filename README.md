@@ -3,7 +3,7 @@ https://github.com/randomknowme/cn1
 https://github.com/randomknowme/cn2
 
 https://github.com/randomknowme/cn3
-
+# Question A
 ### Go-Back-N ARQ
 
 We all know that the **Data Link Layer (DLL)** in the **OSI model** is responsible for the **flow and error control** of the data that is sent from sender to receiver. This flow and error control mechanism follows some set of rules/protocols. We will be discussing **flow control protocols** in this article.
@@ -61,6 +61,10 @@ The Receiver window in the Go Back N ARQ protocol is always of size 1. This mean
 8. The sender **resumes normal transmission from frame 3 onwards**.
 ![Sliding_SET_2-3](https://github.com/user-attachments/assets/e66c2cdb-6d2a-438d-aead-4e60b272ceea)
 
+
+# Question B
+Demultiplexing – 
+Delivering received segments at the receiver side to the correct app layer processes is called demultiplexing. 
 ---
 
 ---
