@@ -63,8 +63,12 @@ The Receiver window in the Go Back N ARQ protocol is always of size 1. This mean
 
 
 # Question B
+
+!!!!!!!!!!!!!!!!!!!!!!! see which is there in q3 and write accordingly 
 Demultiplexing – 
 Delivering received segments at the receiver side to the correct app layer processes is called demultiplexing. 
+ 
+Network-Assisted Conventional Control (NACC) is a control approach that integrates conventional control methods with network-based assistance to enhance system performance. It utilizes communication networks to exchange real-time data, enabling better coordination, remote monitoring, and adaptive control. This approach improves efficiency, reduces delays, and enhances the reliability of control systems in applications like industrial automation, smart grids, and autonomous systems.
 ---
 
 ---
