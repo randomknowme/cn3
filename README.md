@@ -61,7 +61,35 @@ The Receiver window in the Go Back N ARQ protocol is always of size 1. This mean
 8. The sender **resumes normal transmission from frame 3 onwards**.
 ![Sliding_SET_2-3](https://github.com/user-attachments/assets/e66c2cdb-6d2a-438d-aead-4e60b272ceea)
 
+# **Premature Timeout or Packet Delay in Go-Back-N ARQ**
 
+## **1. What is Premature Timeout?**
+Premature timeout occurs when the **sender's timer expires too early**, even though the receiver has already received and acknowledged the frame. This causes **unnecessary retransmissions**, leading to inefficiencies in the protocol.
+
+### **Steps for Premature Timeout in Go-Back-N ARQ:**
+1. **The sender transmits frames 0, 1, 2, 3, and 4** sequentially.
+2. **The receiver successfully receives and acknowledges a frame** (e.g., ACK 2 is sent for frame 2).
+3. **However, due to network congestion or processing delays, the ACK does not reach the sender before the timer expires.**
+4. The sender **assumes the frame was lost** and **retransmits frame 2 unnecessarily**.
+5. The receiver **discards the duplicate frame 2** since it has already received it.
+6. The receiver sends an **ACK again** for the next expected frame.
+7. The sender **resumes normal transmission after receiving the delayed ACK**.
+
+---
+
+## **2. What is Packet Delay?**
+Packet delay occurs when **a data frame or acknowledgment (ACK) is delayed** due to network congestion or processing delays. This can **cause unnecessary retransmissions** if the sender’s timer expires before receiving the delayed ACK.
+
+### **Steps for Packet Delay in Go-Back-N ARQ:**
+1. **The sender transmits frames 0, 1, 2, 3, and 4**.
+2. The receiver **receives frame 2 and sends ACK 2**.
+3. **ACK 2 gets delayed in the network**.
+4. The sender **does not receive ACK 2 before the timer expires** and **wrongly assumes frame 2 is lost**.
+5. The sender **retransmits frame 2**.
+6. The receiver **discards the duplicate frame 2** but still acknowledges it.
+7. Eventually, the **delayed ACK 2 arrives at the sender**, but by then, the unnecessary retransmission has already occurred.
+
+---
 # Question B
 
 !!!!!!!!!!!!!!!!!!!!!!! see which is there in q3 and write accordingly 
