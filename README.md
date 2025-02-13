@@ -89,6 +89,7 @@ Packet delay occurs when **a data frame or acknowledgment (ACK) is delayed** due
 5. The sender **retransmits frame 2**.
 6. The receiver **discards the duplicate frame 2** but still acknowledges it.
 7. Eventually, the **delayed ACK 2 arrives at the sender**, but by then, the unnecessary retransmission has already occurred.
+![Sliding_SET_2-1](https://github.com/user-attachments/assets/61b214e5-ae38-4326-ba0a-607565c27fa6)
 
 ---
 # Question B
