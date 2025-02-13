@@ -74,6 +74,7 @@ Premature timeout occurs when the **sender's timer expires too early**, even tho
 5. The receiver **discards the duplicate frame 2** since it has already received it.
 6. The receiver sends an **ACK again** for the next expected frame.
 7. The sender **resumes normal transmission after receiving the delayed ACK**.
+![gobackn automatic repeat request_send window](https://github.com/user-attachments/assets/654065bb-aa8d-4948-a7ad-8465ad627d9f)
 
 ---
 
