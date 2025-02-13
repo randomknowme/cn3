@@ -4,62 +4,40 @@ https://github.com/randomknowme/cn2
 
 https://github.com/randomknowme/cn3
 
-# unit 3
-# Comparison of HTTP, SMTP, POP3, and IMAP
+### Go-Back-N ARQ
 
-## 2. Definition and Purpose
+We all know that the **Data Link Layer (DLL)** in the **OSI model** is responsible for the **flow and error control** of the data that is sent from sender to receiver. This flow and error control mechanism follows some set of rules/protocols. We will be discussing **flow control protocols** in this article.
 
-1. **HTTP (Hypertext Transfer Protocol)**: Used for accessing and transferring web pages on the internet. It enables communication between web browsers and servers.
-2. **SMTP (Simple Mail Transfer Protocol)**: Used for sending emails from a client to a mail server or between mail servers. It ensures the delivery of outgoing emails.
-3. **POP3 (Post Office Protocol v3)**: Used for retrieving emails from a mail server to a local client. It downloads emails and typically deletes them from the server after retrieval.
-4. **IMAP (Internet Message Access Protocol)**: Used for retrieving and managing emails on a mail server. It allows users to access emails from multiple devices without removing them from the server.
+## Flow Control Protocols
 
-## 3. Architecture
+The flow control protocols are generally divided into two categories:
 
-- **HTTP** follows a **client-server model**, where the client (browser) requests a web page, and the server responds with the content.
-- **SMTP** operates using a **push model**, where emails are pushed from the sender to the mail server and then to the recipient's server.
-- **POP3** works in a **pull model**, where the email client retrieves emails from the mail server and often deletes them from the server.
-- **IMAP** follows a **synchronization model**, allowing users to manage emails directly on the mail server.
+- **Stop and Wait Protocol**
+- **Sliding Window Protocol**
 
-## 4. Key Differences
+The difference between these two categories of flow control protocols is:
+- In the **Stop and Wait Protocol**, only one data frame is sent at a time from sender to receiver.
+- In the **Sliding Window Protocol**, multiple frames can be sent at a time from sender to receiver.
 
-| Feature | HTTP | SMTP | POP3 | IMAP |
-|---------|------|------|------|------|
-| **Usage** | Web browsing | Sending emails | Receiving emails | Receiving & managing emails |
-| **Port Number** | 80 (HTTP), 443 (HTTPS) | 25, 587 (secure) | 110, 995 (secure) | 143, 993 (secure) |
-| **Direction** | Client ↔ Server | Client → Server → Server | Server → Client (Download) | Server ↔ Client (Sync) |
-| **Storage** | Stateless, no storage of data | Stores emails temporarily for transmission | Downloads and deletes emails from the server | Emails remain on the server, accessible from multiple devices |
-| **Connection Type** | Connectionless (stateless) | Connection-oriented | Connection-oriented | Connection-oriented |
-| **Email Synchronization** | Not related to email | Not used for retrieving emails | No synchronization, emails are deleted after download | Supports synchronization, emails remain on server |
-| **Security Protocols** | HTTPS (TLS/SSL) | SMTPS (SSL/TLS) | POP3S (SSL/TLS) | IMAPS (SSL/TLS) |
+## Go-Back-N ARQ
 
-## 5. Advantages & Disadvantages
+**Go-Back-N ARQ** is a **sliding window protocol** used for **flow control** purposes. Multiple frames present in a single window are sent together from sender to receiver.
 
-### **HTTP**
-- **Advantages**: Fast, efficient, widely used, supports multimedia.
-- **Disadvantages**: Not secure without HTTPS, vulnerable to attacks.
+**Pipelining** is allowed in the **Go-Back-N ARQ protocol**. Pipelining means sending a frame before receiving the acknowledgment for the previously sent frame.
 
-### **SMTP**
-- **Advantages**: Reliable for sending emails, supports multiple recipients.
-- **Disadvantages**: Cannot retrieve emails, lacks encryption without additional security layers.
+In this article, we will discuss all the important concepts related to the **Go-Back-N ARQ protocol** in detail.
 
-### **POP3**
-- **Advantages**: Simple, works offline after downloading emails, reduces server storage use.
-- **Disadvantages**: Emails are deleted from the server, making it difficult to access them from multiple devices.
+### Sender Window and Receiver Window in Go-Back-N ARQ Protocol
 
-### **IMAP**
-- **Advantages**: Emails remain on the server, accessible from multiple devices, supports folder organization.
-- **Disadvantages**: Requires more server storage, higher bandwidth usage.
+The **sender window** is a **fixed-sized window** that defines the number of frames that are transmitted from sender to receiver at once. The integer ‘N’ in the **Go-Back-N** represents the frame size.
 
-## 6. Use Cases
-
-- **HTTP**: Used in web browsing, RESTful APIs, online transactions.
-- **SMTP**: Used for sending emails in corporate and personal email communication.
-- **POP3**: Suitable for users who access emails from a single device and prefer local storage.
-- **IMAP**: Ideal for users who need access to emails from multiple devices and want to keep emails organized on the server.
+For example, in **Go-Back-4 ARQ**, the size of the sender window is **4**.
+![sender-window-and-receiver-window (1)](https://github.com/user-attachments/assets/113f2709-6e3c-4a29-b58f-64857e71035e)
+The Receiver window in the Go Back N ARQ protocol is always of size 1. This means that the receiver takes at most 1 frame at a single time.
 
 
-**IMAP is better than POP3** for accessing emails from multiple devices, whereas **SMTP is only for sending emails.**
+
+
 
 
 
