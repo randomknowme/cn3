@@ -6,6 +6,11 @@ https://github.com/randomknowme/cn3
 
 gpt https://chatgpt.com/c/67ae5619-15c4-8001-be16-ecbae5ca68b0
 
+![image](https://github.com/user-attachments/assets/7028b7f5-375a-4561-8ea5-041e57fb554c)
+
+![Screenshot 2025-02-14 043443](https://github.com/user-attachments/assets/bb2d7909-294c-416c-bdc5-32bd571c6305)
+
+
 # unit 3
 The information below is extracted from **your uploaded document**. It contains detailed descriptions, advantages, disadvantages, applications, and time complexities of various **search trees**.
 
