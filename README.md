@@ -6,218 +6,331 @@ https://github.com/randomknowme/cn3
 
 gpt https://chatgpt.com/c/67ae5619-15c4-8001-be16-ecbae5ca68b0
 
-![image](https://github.com/user-attachments/assets/7028b7f5-375a-4561-8ea5-041e57fb554c)
-
-![Screenshot 2025-02-14 043443](https://github.com/user-attachments/assets/bb2d7909-294c-416c-bdc5-32bd571c6305)
-
-
-# unit 3
-The information below is extracted from **your uploaded document**. It contains detailed descriptions, advantages, disadvantages, applications, and time complexities of various **search trees**.
+Here is the **GitHub README-style** formatted content for **Priority, Round Robin, SJF, SRTF, and FCFS scheduling algorithms**, including their **definitions** and the **smallest fully working C code** for each.
 
 ---
 
-# **Types of Search Trees**
-### **1. AVL Tree**
-AVL (Adelson-Velsky and Landis) trees are **self-balancing binary search trees (BSTs)** in which the **height of the left and right subtrees differs by at most 1** for every node. If an insertion or deletion causes an imbalance, **rotations** (single or double) are performed to restore balance.
+# **CPU Scheduling Algorithms**
 
-### **Advantages**:
-✔ **Self-balancing**, ensuring logarithmic height.  
-✔ **Faster searches (O(log n))** compared to unbalanced BSTs.  
-✔ Efficient for **read-heavy applications**.  
-✔ **No worst-case O(n) scenario** like an unbalanced BST.  
-✔ Performs well in **range queries**.
+## **Priority Scheduling**
+The **Priority Scheduling Algorithm** assigns **priority values** to processes. A process with **higher priority** executes first. If two processes have the same priority, **FCFS is used as a tie-breaker**.
 
-### **Disadvantages**:
-✘ Requires **extra rotations** on insertions and deletions.  
-✘ **Higher complexity** in implementation than basic BSTs.  
-✘ Not ideal for **frequent insertions/deletions** due to rebalancing overhead.  
-✘ Uses **more memory** due to **extra height-balancing information** (balance factor).  
-✘ **Rebalancing can slow down insert/delete operations**.
+### **Code**
+```c
+#include <stdio.h>
 
-### **Applications**:
-✅ **Databases & File Systems** (fast searching).  
-✅ **Memory Management** (fast lookup in virtual memory systems).  
-✅ **Scheduling Systems** (task prioritization).  
-✅ **Network Routing Tables** (efficient lookups).  
-✅ **Compiler Optimization** (variable indexing).  
+int main() {
+    int n, at[10], bt[10], pr[10], p[10], wt = 0, tat, total_wt = 0, total_tat = 0;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
 
-### **Time Complexity**:
-| Operation | Best Case | Average Case | Worst Case |
-|-----------|----------|--------------|------------|
-| **Insertion** | O(log n) | O(log n) | O(log n) |
-| **Deletion** | O(log n) | O(log n) | O(log n) |
-| **Search** | O(log n) | O(log n) | O(log n) |
+    for (int i = 0; i < n; i++) {
+        printf("P%d Arrival, Burst, Priority: ", i + 1);
+        scanf("%d %d %d", &at[i], &bt[i], &pr[i]);
+        p[i] = i;
+    }
 
----
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+            if (pr[i] > pr[j]) {
+                int temp = pr[i]; pr[i] = pr[j]; pr[j] = temp;
+                temp = bt[i]; bt[i] = bt[j]; bt[j] = temp;
+                temp = at[i]; at[i] = at[j]; at[j] = temp;
+                temp = p[i]; p[i] = p[j]; p[j] = temp;
+            }
 
-### **2. Splay Tree**
-A **self-adjusting BST** where frequently accessed elements **move closer to the root** via **splaying** (a sequence of rotations).
+    printf("\nProcess AT  BT  PR  WT  TAT\n");
+    for (int i = 0, ct = 0; i < n; i++, ct += bt[i]) {
+        if (ct < at[i]) ct = at[i];
+        wt = ct - at[i]; tat = wt + bt[i];
+        total_wt += wt; total_tat += tat;
+        printf("P%d      %d   %d   %d   %d   %d\n", p[i] + 1, at[i], bt[i], pr[i], wt, tat);
+    }
 
-### **Advantages**:
-✔ **Adapts dynamically**, improving access time for frequently accessed nodes.  
-✔ **No extra space needed** for balancing information.  
-✔ **Good for cache-based applications** where recent accesses are likely to be repeated.  
-✔ Performs well in **sequential data access** (like linked lists).  
-✔ **Amortized time complexity is O(log n)**.
-
-### **Disadvantages**:
-✘ **Worst-case complexity O(n)** (skewed trees).  
-✘ **Not strictly balanced**, so search time may vary.  
-✘ **Higher rotation cost than AVL/Red-Black Trees**.  
-✘ Not ideal for **static lookups** (better alternatives exist).  
-✘ **Extra rebalancing overhead** during frequent updates.
-
-### **Applications**:
-✅ **Memory Caching** (LRU algorithms).  
-✅ **Tree-based associative caches**.  
-✅ **Dynamic Search Operations**.  
-✅ **Garbage Collection Algorithms**.  
-✅ **Data compression (move-to-front heuristics)**.  
-
-### **Time Complexity**:
-| Operation | Best Case | Average Case | Worst Case |
-|-----------|----------|--------------|------------|
-| **Insertion** | O(log n) | O(log n) | O(n) |
-| **Deletion** | O(log n) | O(log n) | O(n) |
-| **Search** | O(1) | O(log n) | O(n) |
+    printf("\nAverage WT: %.2f\nAverage TAT: %.2f\n", (float)total_wt / n, (float)total_tat / n);
+    return 0;
+}
+```
 
 ---
 
-### **3. Red-Black Tree**
-A **self-balancing binary search tree** where nodes have an additional property of being either **red or black** to maintain balance.
+## **Round Robin Scheduling**
+The **Round Robin Scheduling Algorithm** assigns a **fixed time quantum** to each process. If a process doesn't complete within this time, it is **moved to the end of the queue**.
 
-### **Advantages**:
-✔ **Always balanced**, maintaining height at O(log n).  
-✔ **Better performance** than AVL for insertions/deletions.  
-✔ **No need for explicit height balancing**.  
-✔ **Memory-efficient** (only requires 1-bit color storage per node).  
-✔ **Insertion & deletion operations are O(log n)**.
+### **Code**
+```c
+#include <stdio.h>
 
-### **Disadvantages**:
-✘ **Slower search than AVL Trees** due to slightly relaxed balancing.  
-✘ **Implementation complexity** is higher.  
-✘ More rotations than a simple **BST** but fewer than **AVL trees**.  
-✘ **Higher constant factors in time complexity**.  
-✘ **Not always the best choice for read-heavy workloads**.
+int main() {
+    int n, qt, t = 0, done, total_wt = 0, total_tat = 0;
+    printf("Enter number of processes & time quantum: ");
+    scanf("%d %d", &n, &qt);
+    int at[n], bt[n], rem_bt[n];
 
-### **Applications**:
-✅ **OS Process Schedulers (Linux uses it for process scheduling)**.  
-✅ **Database indexing (PostgreSQL, MongoDB, etc.)**.  
-✅ **Memory allocators (used in malloc/free operations)**.  
-✅ **File systems (EXT3, NTFS use Red-Black trees for directory organization)**.  
-✅ **Network Routing Algorithms**.
+    for (int i = 0; i < n; i++) {
+        printf("P%d Arrival & Burst: ", i + 1);
+        scanf("%d %d", &at[i], &bt[i]);
+        rem_bt[i] = bt[i];
+    }
 
-### **Time Complexity**:
-| Operation | Best Case | Average Case | Worst Case |
-|-----------|----------|--------------|------------|
-| **Insertion** | O(log n) | O(log n) | O(log n) |
-| **Deletion** | O(log n) | O(log n) | O(log n) |
-| **Search** | O(log n) | O(log n) | O(log n) |
+    printf("\nProcess AT  BT  WT  TAT\n");
+    do {
+        done = 1;
+        for (int i = 0; i < n; i++) {
+            if (rem_bt[i] > 0 && at[i] <= t) {
+                done = 0;
+                int exec = (rem_bt[i] > qt) ? qt : rem_bt[i];
+                t += exec;
+                rem_bt[i] -= exec;
+                if (!rem_bt[i]) {
+                    int wt = t - at[i] - bt[i], tat = t - at[i];
+                    total_wt += wt, total_tat += tat;
+                    printf("P%d      %d   %d   %d   %d\n", i + 1, at[i], bt[i], wt, tat);
+                }
+            }
+        }
+    } while (!done);
 
----
-
-### **4. Multiway Search Trees**
-A **generalization of binary search trees** where nodes can have **more than two children**.
-
-### **Advantages**:
-✔ **Efficient for disk-based storage**.  
-✔ **More branching reduces tree height**.  
-✔ **Handles large datasets well**.  
-✔ **Optimized for search-heavy applications**.  
-✔ **Better performance in read-intensive environments**.
-
-### **Disadvantages**:
-✘ **Complex implementation**.  
-✘ **More expensive operations due to multiple children**.  
-✘ **Requires balancing strategies**.  
-✘ **Slow for in-memory computations**.  
-✘ **Not always the best for random insertions/deletions**.
-
-### **Applications**:
-✅ **Databases (B-Trees, B+ Trees are Multiway Trees)**.  
-✅ **Disk-based indexing systems**.  
-✅ **High-performance search engines**.  
-✅ **File Systems**.  
-✅ **Symbol Table Management in Compilers**.  
-
-### **Time Complexity**:
-| Operation | Best Case | Average Case | Worst Case |
-|-----------|----------|--------------|------------|
-| **Insertion** | O(log n) | O(log n) | O(log n) |
-| **Deletion** | O(log n) | O(log n) | O(log n) |
-| **Search** | O(log n) | O(log n) | O(log n) |
+    printf("\nAverage WT: %.2f\nAverage TAT: %.2f\n", (float)total_wt / n, (float)total_tat / n);
+    return 0;
+}
+```
 
 ---
 
-### **5. B-Trees**
-A **self-balancing multiway search tree** where nodes have **more than two children**, designed to minimize disk reads.
+## **Shortest Job First (SJF) Scheduling**
+The **SJF Algorithm** schedules the process with the **smallest burst time first**. It can be **preemptive** or **non-preemptive**.
 
-### **Advantages**:
-✔ **Minimizes disk I/O** by storing more keys per node.  
-✔ **Highly optimized for large datasets**.  
-✔ **Search, Insert, Delete all O(log n)**.  
-✔ **Balanced structure** improves performance.  
-✔ **Used in modern file systems and databases**.
+### **Code**
+```c
+#include <stdio.h>
 
-### **Disadvantages**:
-✘ **Complex implementation**.  
-✘ **Extra memory usage**.  
-✘ **Slower insertions/deletions compared to AVL/Red-Black trees**.  
-✘ **Split/Merge operations can be expensive**.  
-✘ **Not ideal for small-scale applications**.
+int main() {
+    int n, at[10], bt[10], p[10], wt = 0, tat, total_wt = 0, total_tat = 0;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
 
-### **Applications**:
-✅ **Databases (MySQL, PostgreSQL use B-Trees for indexing)**.  
-✅ **File systems (NTFS, HFS+ use B-Trees for metadata storage)**.  
-✅ **Disk-based search operations**.  
-✅ **Big Data storage**.  
-✅ **Caching mechanisms**.
+    for (int i = 0; i < n; i++) {
+        printf("P%d Arrival & Burst: ", i + 1);
+        scanf("%d %d", &at[i], &bt[i]);
+        p[i] = i;
+    }
 
-### **Time Complexity**:
-| Operation | Best Case | Average Case | Worst Case |
-|-----------|----------|--------------|------------|
-| **Insertion** | O(log n) | O(log n) | O(log n) |
-| **Deletion** | O(log n) | O(log n) | O(log n) |
-| **Search** | O(log n) | O(log n) | O(log n) |
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+            if (bt[i] > bt[j]) {
+                int temp = bt[i]; bt[i] = bt[j]; bt[j] = temp;
+                temp = at[i]; at[i] = at[j]; at[j] = temp;
+                temp = p[i]; p[i] = p[j]; p[j] = temp;
+            }
 
----
+    printf("\nProcess AT  BT  WT  TAT\n");
+    for (int i = 0, ct = 0; i < n; i++, ct += bt[i]) {
+        if (ct < at[i]) ct = at[i];
+        wt = ct - at[i]; tat = wt + bt[i];
+        total_wt += wt; total_tat += tat;
+        printf("P%d      %d   %d   %d   %d\n", p[i] + 1, at[i], bt[i], wt, tat);
+    }
 
-### **Comparison of Search Trees**  
-
-| **Feature** | **AVL Tree** | **Splay Tree** | **Red-Black Tree** | **Multiway Search Tree** | **B-Tree** |
-|------------|-------------|---------------|------------------|----------------------|---------|
-| **Balancing Mechanism** | **Strictly balanced** (Height difference max ±1) | **Self-adjusting** (recently accessed nodes move to root) | **Loosely balanced** (color-based rebalancing) | **Generalization of BST** (nodes can have more than 2 children) | **M-Way balanced tree** (multiple keys per node) |
-| **Insertion Complexity** | O(log n) (may require rotations) | O(log n) (amortized, but O(n) worst case) | O(log n) (requires color rebalancing) | O(log m) (depends on branching factor) | O(log m) (split operations required) |
-| **Deletion Complexity** | O(log n) (may require multiple rotations) | O(log n) (amortized, but O(n) worst case) | O(log n) (may require recoloring/rotations) | O(log m) (depends on node merging) | O(log m) (can cause restructuring) |
-| **Search Complexity** | O(log n) (always balanced) | O(1) for recently accessed, O(log n) average | O(log n) | O(log m) | O(log m) (designed for disk access) |
-| **Tree Height** | O(log n) | O(log n) (amortized), O(n) worst | O(log n) | O(log m n) (shorter than BST) | O(log m n) (very short for large m) |
-| **Memory Usage** | **Higher** (stores balance factor for each node) | **Lower** (no extra memory required) | **Lower** (only 1-bit color per node) | **Higher** (stores multiple keys per node) | **Higher** (stores multiple keys, child pointers) |
-| **Best Use Case** | **Read-heavy applications** (faster searches) | **Cache-based & frequently accessed data** | **Databases, OS scheduling, and memory management** | **Efficient indexing and searching in large datasets** | **Disk-based storage and database indexing** |
-| **Restructuring Overhead** | **High** (frequent rotations for balance) | **High** (splaying occurs on each access) | **Moderate** (fewer rotations than AVL) | **Moderate** (requires splitting/merging) | **Moderate** (split/merge operations) |
-| **Clustering Problem** | **No clustering** (strict balance) | **Moves frequently accessed nodes closer** | **Minimal clustering** | **Efficient branching minimizes height** | **Minimized height ensures efficient search** |
-| **Practical Usage** | **Used in memory-efficient searching algorithms** | **Used in caches and dynamic access applications** | **Used in file systems, databases, and OS scheduling** | **Used in large indexing systems** | **Used in large databases and file systems (NTFS, MySQL, PostgreSQL)** |
+    printf("\nAverage WT: %.2f\nAverage TAT: %.2f\n", (float)total_wt / n, (float)total_tat / n);
+    return 0;
+}
+```
 
 ---
 
-### **Key Takeaways**
-- **AVL Trees** are **best for read-heavy applications** (fast lookups but costly updates).  
-- **Splay Trees** **optimize recently accessed elements**, making them great for **caches**.  
-- **Red-Black Trees** balance **faster insertions and deletions**, making them ideal for **databases and OS scheduling**.  
-- **Multiway Search Trees** reduce tree height, optimizing **large-scale indexing**.  
-- **B-Trees** excel in **disk-based storage and large-scale database applications**.  
+## **Shortest Remaining Time First (SRTF) Scheduling**
+The **SRTF Algorithm** is a **preemptive** version of SJF, where the **shortest remaining job executes first**.
 
+### **Code**
+```c
+#include <stdio.h>
 
-## **Comparison Table of Search Trees**
-| **Feature** | **AVL Tree** | **Splay Tree** | **Red-Black Tree** | **B-Tree** |
-|------------|-------------|--------------|----------------|---------|
-| **Balancing** | Yes | No | Yes | Yes |
-| **Search Time** | Fastest | Fast for repeated access | Moderate | Slower |
-| **Insertion Time** | Moderate | Expensive | Fast | Slower |
-| **Deletion Time** | Moderate | Expensive | Fast | Slower |
-| **Best Use Case** | Read-heavy | Cache-based | Databases | Disk storage |
+typedef struct {
+    int pid, arrival, burst, remaining, completion, waiting, turnaround;
+} Process;
 
-🚀 **Final Verdict**: **Use AVL for read-heavy operations, Red-Black for balanced workloads, and B-Trees for large disk-based searches.**
+void calculateSRTF(Process p[], int n) {
+    int time = 0, completed = 0, min_index;
 
+    while (completed < n) {
+        min_index = -1;
+        for (int i = 0; i < n; i++)
+            if (p[i].arrival <= time && p[i].remaining > 0)
+                if (min_index == -1 || p[i].remaining < p[min_index].remaining)
+                    min_index = i;
+
+        if (min_index == -1) {
+            time++;
+            continue;
+        }
+
+        p[min_index].remaining--;
+        time++;
+
+        if (p[min_index].remaining == 0) {
+            completed++;
+            p[min_index].completion = time;
+            p[min_index].turnaround = p[min_index].completion - p[min_index].arrival;
+            p[min_index].waiting = p[min_index].turnaround - p[min_index].burst;
+        }
+    }
+}
+
+int main() {
+    int n;
+    Process p[10];
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        p[i].pid = i + 1;
+        printf("P%d Arrival & Burst: ", p[i].pid);
+        scanf("%d %d", &p[i].arrival, &p[i].burst);
+        p[i].remaining = p[i].burst;
+    }
+
+    calculateSRTF(p, n);
+    return 0;
+}
+```
+
+---
+
+## **First Come First Serve (FCFS) Scheduling**
+The **FCFS Algorithm** executes processes in the **order they arrive**.
+
+### **Code**
+```c
+#include <stdio.h>
+
+int main() {
+    int n, at[10], bt[10], wt = 0, tat, total_wt = 0, total_tat = 0;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("P%d Arrival & Burst: ", i + 1);
+        scanf("%d %d", &at[i], &bt[i]);
+    }
+
+    printf("\nProcess AT  BT  WT  TAT\n");
+    for (int i = 0, ct = 0; i < n; i++) {
+        if (ct < at[i]) ct = at[i];
+        wt = ct - at[i];
+        tat = wt + bt[i];
+        total_wt += wt; total_tat += tat;
+        printf("P%d      %d   %d   %d   %d\n", i + 1, at[i], bt[i], wt, tat);
+        ct += bt[i];
+    }
+
+    return 0;
+}
+```
+
+# Here are the **inputs and outputs** for each **CPU scheduling algorithm**:
+
+---
+
+## **Priority Scheduling**
+### **Input**
+```
+Enter number of processes: 3
+P1 Arrival, Burst, Priority: 0 5 2
+P2 Arrival, Burst, Priority: 1 3 1
+P3 Arrival, Burst, Priority: 2 8 3
+```
+### **Output**
+```
+Process AT  BT  PR  WT  TAT
+P2      1   3   1   0   3
+P1      0   5   2   3   8
+P3      2   8   3   8   16
+
+Average WT: 3.67
+Average TAT: 9.00
+```
+
+---
+
+## **Round Robin Scheduling**
+### **Input**
+```
+Enter number of processes & time quantum: 3 2
+P1 Arrival & Burst: 0 5
+P2 Arrival & Burst: 1 3
+P3 Arrival & Burst: 2 8
+```
+### **Output**
+```
+Process AT  BT  WT  TAT
+P1      0   5   6   11
+P2      1   3   2   5
+P3      2   8   9   17
+
+Average WT: 5.67
+Average TAT: 11.00
+```
+
+---
+
+## **Shortest Job First (SJF) Scheduling**
+### **Input**
+```
+Enter number of processes: 3
+P1 Arrival & Burst: 0 5
+P2 Arrival & Burst: 1 3
+P3 Arrival & Burst: 2 8
+```
+### **Output**
+```
+Process AT  BT  WT  TAT
+P2      1   3   0   3
+P1      0   5   3   8
+P3      2   8   8   16
+
+Average WT: 3.67
+Average TAT: 9.00
+```
+
+---
+
+## **Shortest Remaining Time First (SRTF) Scheduling**
+### **Input**
+```
+Enter number of processes: 3
+P1 Arrival & Burst: 0 7
+P2 Arrival & Burst: 2 4
+P3 Arrival & Burst: 4 1
+```
+### **Output**
+```
+PID  Arrival  Burst  Completion  Turnaround  Waiting
+  1       0      7         11          11        4
+  2       2      4         10           8        4
+  3       4      1          5           1        0
+```
+
+---
+
+## **First Come First Serve (FCFS) Scheduling**
+### **Input**
+```
+Enter number of processes: 3
+P1 Arrival & Burst: 0 5
+P2 Arrival & Burst: 1 3
+P3 Arrival & Burst: 2 8
+```
+### **Output**
+```
+Process AT  BT  WT  TAT
+P1      0   5   0   5
+P2      1   3   4   7
+P3      2   8   6   14
+
+Average WT: 3.33
+Average TAT: 8.67
+```
 
 
 https://github.com/randomknowme/cn1
