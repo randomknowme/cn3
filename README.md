@@ -4,7 +4,7 @@ https://github.com/randomknowme/cn2
 
 https://github.com/randomknowme/cn3
 
-gpt https://chatgpt.com/c/67ae5619-15c4-8001-be16-ecbae5ca68b0
+gpt https://chatgpt.com/c/677ca69b-2d08-8001-be39-58ac8e4fb8fd
 
 Here is the **GitHub README-style** formatted content for **Priority, Round Robin, SJF, SRTF, and FCFS scheduling algorithms**, including their **definitions** and the **smallest fully working C code** for each.
 
